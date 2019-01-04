@@ -176,12 +176,12 @@ log.debug "Executing 'poll'"
 
 String convertTemperature( float temperatureCelcius, unit)
 {
-	float value = temperatureCelcius
-    
-    if (unit =="F")
-    {
-       value = temperatureCelcius * 1.8 + 32.0
-    }
+	float value = temperatureCelcius 
+    // No clue yet how to know if units are F or C in TWC interface so do nothing
+    //if (unit =="F")
+    //{
+    //   value = temperatureCelcius * 1.8 + 32.0
+    // }
     return value.toString().format(java.util.Locale.US,"%.1f", value)
 }
 
