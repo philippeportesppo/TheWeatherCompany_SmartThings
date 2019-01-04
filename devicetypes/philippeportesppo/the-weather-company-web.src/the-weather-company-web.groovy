@@ -25,19 +25,19 @@ metadata {
 	tiles(scale: 2) {
 
 	standardTile("TWC_web", "device.TWC_web",  width: 6, height: 3,  canChangeIcon: false ) {
-            state "default", icon: "https://business.weather.com/img/the-weather-company-logo.png", backgroundColor: "#555555"      }   
+            state "default", icon: "https://business.weather.com/img/the-weather-company-logo.png", backgroundColor: "#999999"      }   
              
     standardTile("temperature", "device.temperature", width: 2, height: 2, canChangeIcon: false) {
-            state "default", label: '${currentValue}º',unit:'${currentValue}', icon: "st.Weather.weather2", backgroundColor:"#e5e9ea"}  
+            state "default", label: '${currentValue}º',unit:'${currentValue}', icon: "st.Weather.weather2", backgroundColor:"#999999"}  
         
 	standardTile("humidity", "device.humidity", width: 2, height: 2, canChangeIcon: false) {
-            state "default", label: '${currentValue}%', icon: "st.Weather.weather12", backgroundColor:"#e5e9ea"      }
+            state "default", label: '${currentValue}%', icon: "st.Weather.weather12", backgroundColor:"#999999"      }
             
 	standardTile("TWCFeelsLikelevel", "device.TWCFeelsLikelevel",  width: 2, height: 2, canChangeIcon: false) {
-            state "default",  label: '${currentValue}º',unit:'${currentValue}',icon: "https://raw.githubusercontent.com/philippeportesppo/AirMentorPro2_SmartThings/master/images/realfeel.png", backgroundColor:"#e5e9ea"}
+            state "default",  label: '${currentValue}º',unit:'${currentValue}',icon: "https://raw.githubusercontent.com/philippeportesppo/AirMentorPro2_SmartThings/master/images/realfeel.png", backgroundColor:"#999999"}
 
 	standardTile("TWCdewpointlevel", "device.TWCdewpointlevel",  width: 2, height: 2, canChangeIcon: false) {
-            state "default", label: '${currentValue}º',unit:'${currentValue}',icon: "https://raw.githubusercontent.com/philippeportesppo/AirMentorPro2_SmartThings/master/images/dewpoint.png", backgroundColor:"#e5e9ea"}
+            state "default", label: '${currentValue}º',unit:'${currentValue}',icon: "https://raw.githubusercontent.com/philippeportesppo/AirMentorPro2_SmartThings/master/images/dewpoint.png", backgroundColor:"#999999"}
             
     standardTile("TWC_Icon_UrlIcon", "device.TWC_Icon_UrlIcon", decoration: "flat",   width: 2, height: 2) {
                 
