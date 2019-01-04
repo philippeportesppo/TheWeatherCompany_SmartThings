@@ -233,10 +233,10 @@ def refresh() {
     def temperatureScale = getTemperatureScale()
 
     // UnderGround Weather references
-    sendEvent(name: "TWCFeelsLikelevel", value: convertTemperature(mymap['temperatureFeelsLike'].toFloat(),temperatureScale), unit: temperatureScale)
-    sendEvent(name: "TWCdewpointlevel", value: convertTemperature(mymap['temperatureDewPoint'].toFloat(),temperatureScale), unit: temperatureScale)
+    sendEvent(name: "TWCFeelsLikelevel", value: mymap['temperatureFeelsLike'], unit: temperatureScale)
+    sendEvent(name: "TWCdewpointlevel", value: mymap['temperatureDewPoint'], unit: temperatureScale)
     sendEvent(name: "humidity", value:  mymap['relativeHumidity'])
-    sendEvent(name: "temperature", value: convertTemperature(mymap['temperature'].toFloat(),temperatureScale), unit: temperatureScale)
+    sendEvent(name: "temperature", value: mymap['temperature'], unit: temperatureScale)
     sendEvent(name: "TWC_Icon_UrlIcon", value: mymap['iconCode'])
     sendEvent(name: "TWC_main", value: mymap['iconCode'])
     sendEvent(name: "weather", value: mymap['wxPhraseMedium'], display:true, isStateChange: true)
@@ -270,7 +270,7 @@ def refresh() {
         state.stormalert=false
 
     if (getDataValue("TWClowtempalert")!="null") {
-        if (getDataValue("TWClowtempalert").toFloat() >= convertTemperature(mymap['temperature'].toFloat(),temperatureScale).toFloat())
+        if (getDataValue("TWClowtempalert").toFloat() >= mymap['temperature'].toFloat())
         {
 
             //if ( state.lowtempalert == false) {
@@ -282,7 +282,7 @@ def refresh() {
     }
 
     if (getDataValue("TWChightempalert")!="null") {
-        if (getDataValue("TWChightempalert").toFloat() <= convertTemperature(mymap['temperature'].toFloat(),temperatureScale).toFloat())
+        if (getDataValue("TWChightempalert").toFloat() <= mymap['temperature'].toFloat())
         {
 
             //if ( state.hightempalert == false) {
