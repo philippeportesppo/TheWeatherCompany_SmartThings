@@ -157,19 +157,23 @@ def addDevices() {
         log.debug "Devices installed after removal ${Ref}"
     }
     // and create it again with the new settings
-    def mymap = getWeatherFeature("conditions")
+    def mymap = getTwcLocation()
+    
+    log.debug mymap
 
-    def wucity = mymap['current_observation']['display_location']['full']
+    def twccity = mymap['location']['city']
+    def twcstate = mymap['location']['adminDistrictCode']
+    log.debug twccity
     subscribe(addChildDevice("philippeportesppo", "The Weather Company Web", state.deviceId, null, [
-        "label": "Weather in ${twccity}",
+        "label": "Weather in ${twccity}, ${twcstate}",
         "data": [
-            "wusnowalert": twcsnowalert,
-            "wustormalert": twcstormalert,
-            "wurainalert": twcrainalert,
-            "wulowtempalert": twclowtempalert,
-            "wuhightempalert": twchightempalert,
-            "wulowhumidityalert": twclowhumidityalert,
-            "wuhighhumidityalert": twchighhumidityalert,
+            "TWCsnowalert": twcsnowalert,
+            "TWCstormalert": twcstormalert,
+            "TWCrainalert": twcrainalert,
+            "TWClowtempalert": twclowtempalert,
+            "TWChightempalert": twchightempalert,
+            "TWClowhumidityalert": twclowhumidityalert,
+            "TWChighhumidityalert": twchighhumidityalert,
             /*completedSetup: true*/]
     ]), "Alert", eventHandler)                           
 }
