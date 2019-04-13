@@ -26,7 +26,9 @@ definition(
 
 preferences {
 
-
+ 		section("Weather location Settings") {
+            input "twcZipCode", "string", title: "ZipCode (leave empty for hub default location. Unsupported Zip code will cause error saving page.)", required: false
+ 			}
         section("Alert Settings") {
             input "twcsnowalert", "bool", title: "Snow Alert"
             input "twcstormalert", "bool", title: "Storm Alert" 
@@ -34,69 +36,72 @@ preferences {
 			input "twctwcwtempalert", "number", title: "Low temperature Alert (C or F)", required: false
  			input "twctwcghtempalert", "number", title: "High temperature Alert (C or F)", required: false
 			input "twclowhumidityalert", "decimal", title: "Low humidity Alert (0-100)", required: false
-            input "twchighhumidityalert", "decimal", title: "High humidity Alert (0-100)", required: false            
+            input "twchighhumidityalert", "decimal", title: "High humidity Alert (0-100)", required: false
+            input "twclowwindalert", "decimal", title: "Low wind Alert (0-100)", required: false
+            input "twchighwindalert", "decimal", title: "High wind Alert (0-100)", required: false            
+
         }
         
         section("Switch On these on Snow Alert:")
         {
         	input "twcsnowon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Snow Alert:")
         {
         	input "twcsnowoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Rain Alert:")
         {
         	input "twcrainon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Rain Alert:")
         {
         	input "twcrainoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Storm Alert:")
         {
         	input "twcstormon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Storm Alert:")
         {
         	input "twcstormoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
 		section("Switch On these on Low Temperature Alert:")
         {
         	input "twclowton", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Low Temperature Alert:")
         {
         	input "twclowtoff", "capability.switch", required: false, multiple: true
         }
-  twc   	
+     	
         section("Switch On these on High Temperature Alert:")
         {
         	input "twchighton", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on High Temperature Alert:")
         {
         	input "twchightoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Low Humidity Alert:")
         {
         	input "twclowhon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Low Humidity Alert:")
         {
         	input "twclowhoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on High Humidity Alert:")
         {
         	input "twchighhon", "capability.switch", required: false, multiple: true
@@ -107,6 +112,25 @@ preferences {
         	input "twchighhoff", "capability.switch", required: false, multiple: true
         }
         
+        section("Switch On these on Low Wind Alert:")
+        {
+        	input "twclowwon", "capability.switch", required: false, multiple: true
+        }
+      
+        section("Switch Off these on Low Wind Alert:")
+        {
+        	input "twclowwoff", "capability.switch", required: false, multiple: true
+        }
+      
+        section("Switch On these on High Wind Alert:")
+        {
+        	input "twchigwhon", "capability.switch", required: false, multiple: true
+        }
+        
+        section("Switch Off these on High Wind Alert:")
+        {
+        	input "twchighwoff", "capability.switch", required: false, multiple: true
+        }
 }
 
 def installed() {
@@ -157,7 +181,7 @@ def addDevices() {
         log.debug "Devices installed after removal ${Ref}"
     }
     // and create it again with the new settings
-    def mymap = getTwcLocation()
+    def mymap = getTwcLocation(twcZipCode)
     
     log.debug mymap
 
@@ -174,6 +198,11 @@ def addDevices() {
             "TWChightempalert": twchightempalert,
             "TWClowhumidityalert": twclowhumidityalert,
             "TWChighhumidityalert": twchighhumidityalert,
+            "TWClowwindalert": twclowwindalert,         
+            "TWChighwindalert": twchighwindalert,
+            "TWCzipcode": twcZipCode
+
+         
             /*completedSetup: true*/]
     ]), "Alert", eventHandler)                           
 }
@@ -243,6 +272,24 @@ def eventHandler(evt)
             }
 		}
         
+        if (evt.value.contains("Wind")) {
+        	if (evt.value.contains("High"))
+            {
+            	if (twchighhon!=null)
+        			twchighhon.on()
+                    
+                if (twchighhoff!=null)
+            		twchighhoff.off()
+            }
+            else
+            {
+                if (twclowhon!=null)
+        			twclowhon.on()
+                    
+                if (twclowhoff!=null)
+	            	twclowhoff.off()            
+            }
+		}        
     	options.method = 'push'
         sendNotification(evt.value, options) 
 
