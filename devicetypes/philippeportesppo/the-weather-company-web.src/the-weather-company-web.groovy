@@ -217,11 +217,8 @@ def forcepoll()
 def refresh() {
 	log.debug "Executing 'refresh'"
     
-    def mymap2= getTwcLocation(getDataValue("TWCzipcode"))
-    log.debug mymap2
+    def mymap = getTwcConditions()
 
-    def mymap = getTwcConditions(getDataValue("TWCzipcode"))
-    
     log.debug mymap
 
     log.debug "response feelslike_c: ${mymap['temperatureFeelsLike']}"
