@@ -131,29 +131,29 @@ preferences {
         
         section("Open these on Low Wind Alert:")
         {
-        	input "twclowwopen", "capability.switch", required: false, multiple: true
+        	input "twclowwopen", "capability.DoorControl", required: false, multiple: true
         }
         
         section("Close these on Low Wind Alert:")
         {
-        	input "twchighwclose", "capability.switch", required: false, multiple: true
+        	input "twchighwclose", "capability.DoorControl", required: false, multiple: true
         }
         
         
         section("Open these on High Wind Alert:")
         {
-        	input "twchigwopen", "capability.door", required: false, multiple: true
+        	input "twchigwopen", "capability.DoorControl", required: false, multiple: true
         }
         
         section("Close these on High Wind Alert:")
         {
-        	input "twchighwclose", "capability.door", required: false, multiple: true
+        	input "twchighwclose", "capability.DoorControl", required: false, multiple: true
         }
 }
 
 def installed() {
 	log.debug "Installed with settings: ${settings}"
-	state.deviceId="12345678AF"
+	state.deviceId="12345678AFR"
     state.deviceName=""
     state.deviceRef= getAllChildDevices()?.find {
     it.device.deviceNetworkId == state.deviceId}
