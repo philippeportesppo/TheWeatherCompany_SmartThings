@@ -26,9 +26,6 @@ definition(
 
 preferences {
 
- 		section("Weather location Settings") {
-            input "twcZipCode", "string", title: "ZipCode (leave empty for hub default location. Unsupported Zip code will cause error saving page.)", required: false
- 			}
         section("Alert Settings") {
             input "twcsnowalert", "bool", title: "Snow Alert"
             input "twcstormalert", "bool", title: "Storm Alert" 
@@ -202,8 +199,8 @@ def addDevices() {
         log.debug "Devices installed after removal ${Ref}"
     }
     // and create it again with the new settings
-    def mymap = getTwcLocation(twcZipCode)
-    
+    def mymap = getTwcLocation()
+
     log.debug mymap
 
     def twccity = mymap['location']['city']
@@ -220,10 +217,7 @@ def addDevices() {
             "TWClowhumidityalert": twclowhumidityalert,
             "TWChighhumidityalert": twchighhumidityalert,
             "TWClowwindalert": twclowwindalert,         
-            "TWChighwindalert": twchighwindalert,
-            "TWCzipcode": twcZipCode
-
-         
+            "TWChighwindalert": twchighwindalert,         
             /*completedSetup: true*/]
     ]), "Alert", eventHandler)                           
 }
