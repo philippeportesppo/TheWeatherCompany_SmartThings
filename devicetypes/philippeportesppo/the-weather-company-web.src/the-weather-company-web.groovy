@@ -38,7 +38,11 @@ metadata {
 
 	standardTile("TWCdewpointlevel", "device.TWCdewpointlevel",  width: 2, height: 2, canChangeIcon: false) {
             state "default", label: '${currentValue}º',unit:'${currentValue}',icon: "https://raw.githubusercontent.com/philippeportesppo/AirMentorPro2_SmartThings/master/images/dewpoint.png", backgroundColor:"#999999"}
-            
+
+    standardTile("wind", "device.wind", width: 2, height: 2, canChangeIcon: false) {
+            state "default", label: '${currentValue}',unit:'${currentValue}', icon: "https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/24.png", backgroundColor:"#999999"}  
+
+
     standardTile("TWC_Icon_UrlIcon", "device.TWC_Icon_UrlIcon", decoration: "flat",   width: 2, height: 2) {
                 
                 state "na",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/na.png"
@@ -153,7 +157,7 @@ metadata {
                 state "46",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/46.png"
                 state "47",icon:"https://raw.githubusercontent.com/philippeportesppo/TheWeatherCompany_SmartThings/master/icons/47.png"  		}
 	main("TWC_main")
-	details(["TWC_web","temperature","humidity","TWCFeelsLikelevel","TWCdewpointlevel","TWC_Icon_UrlIcon","weather","refresh" ])
+	details(["TWC_web","temperature","humidity","TWCFeelsLikelevel","TWCdewpointlevel","TWC_Icon_UrlIcon","wind","weather","refresh" ])
  	}
 }
 
@@ -185,6 +189,7 @@ String convertTemperature( float temperatureCelcius, unit)
     return value.toString().format(java.util.Locale.US,"%.1f", value)
 }
 
+
 // parse events into attributes
 def parse(String description) {
 	log.debug "Executing 'parse'"
@@ -196,6 +201,8 @@ def parse(String description) {
 	state.hightempalert=false
     state.lowhumidityalert=false
     state.highhumidityalert=false    
+    state.lowwindalert=false
+    state.highwindalert=false  
     refresh()    
     runEvery10Minutes(forcepoll)
     
@@ -210,24 +217,19 @@ def forcepoll()
 def refresh() {
 	log.debug "Executing 'refresh'"
     
-    def mymap = getTwcConditions()
+    def mymap2= getTwcLocation(getDataValue("TWCzipcode"))
+    log.debug mymap2
+
+    def mymap = getTwcConditions(getDataValue("TWCzipcode"))
     
     log.debug mymap
-
-	/*log.debug "state.snowalert=${state.snowalert}"
-    log.debug "state.stormalert=${state.stormalert}"
-    log.debug "state.rainmalert=${state.rainmalert}"
-    log.debug "state.lowtempalert=${state.lowtempalert}"
-    log.debug "state.hightempalert=${state.hightempalert}"
-    log.debug "state.lowhumidityalert=${state.lowhumidityalert}"
-    log.debug "state.highhumidityalert=${state.highhumidityalert}"*/
-
 
     log.debug "response feelslike_c: ${mymap['temperatureFeelsLike']}"
     log.debug "response dewpoint_c: ${mymap['temperatureDewPoint']}"
     log.debug "response relative_humidity: ${mymap['relativeHumidity']}"
     log.debug "response temp_c: ${mymap['temperature']}"
     log.debug "response weather: ${mymap['wxPhraseMedium']}"
+    log.debug "response wind: ${mymap['windSpeed']}"
 
     //log.debug "Generating events for UX refresh"
     def temperatureScale = getTemperatureScale()
@@ -240,6 +242,7 @@ def refresh() {
     sendEvent(name: "TWC_Icon_UrlIcon", value: mymap['iconCode'])
     sendEvent(name: "TWC_main", value: mymap['iconCode'])
     sendEvent(name: "weather", value: mymap['wxPhraseMedium'], display:true, isStateChange: true)
+    sendEvent(name: "wind", value: mymap['windSpeed'], isStateChange: true)
 
 
     if (getDataValue("TWCsnowalert")=="True" && mymap['wxPhraseMedium'].contains("Snow"))
@@ -320,5 +323,33 @@ def refresh() {
         else
             state.highhumidityalert=false
     }
+    
+    if (getDataValue("TWClowwindalert")!="null") {
+        if (getDataValue("TWClowwindyalert").toFloat() >= mymap['windSpeed'].toFloat())
+        {
 
+            //if ( state.lowhumidityalert == false) {
+
+                sendEvent(name:"Alert", value: "TWC Low Wind Alert!", display:true)
+            //    state.lowhumidityalert=true }
+        }
+        else
+        {
+            state.lowhumidityalert=false
+
+        }
+    }
+
+    
+	if (getDataValue("TWChighwindalert")!="null") {
+
+        if (getDataValue("TWChighwindalert").toFloat() <= mymap['windSpeed'].toFloat())
+        {
+            //if ( state.highhumidityalert == false) {
+                sendEvent(name:"Alert", value: "TWC High Wind Alert!", display:true)
+            //    state.highhumidityalert=true }
+        }
+        else
+            state.highhumidityalert=false
+    }
 }    
