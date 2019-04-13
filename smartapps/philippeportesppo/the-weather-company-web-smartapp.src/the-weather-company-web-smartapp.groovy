@@ -142,12 +142,12 @@ preferences {
         
         section("Open these on High Wind Alert:")
         {
-        	input "twchigwopen", "capability.switch", required: false, multiple: true
+        	input "twchigwopen", "capability.door", required: false, multiple: true
         }
         
         section("Close these on High Wind Alert:")
         {
-        	input "twchighwclose", "capability.switch", required: false, multiple: true
+        	input "twchighwclose", "capability.door", required: false, multiple: true
         }
 }
 
