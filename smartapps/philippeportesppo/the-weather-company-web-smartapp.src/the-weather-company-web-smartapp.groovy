@@ -131,6 +131,27 @@ preferences {
         {
         	input "twchighwoff", "capability.switch", required: false, multiple: true
         }
+        
+        section("Open these on Low Wind Alert:")
+        {
+        	input "twclowwopen", "capability.switch", required: false, multiple: true
+        }
+        
+        section("Close these on Low Wind Alert:")
+        {
+        	input "twchighwclose", "capability.switch", required: false, multiple: true
+        }
+        
+        
+        section("Open these on High Wind Alert:")
+        {
+        	input "twchigwopen", "capability.switch", required: false, multiple: true
+        }
+        
+        section("Close these on High Wind Alert:")
+        {
+        	input "twchighwclose", "capability.switch", required: false, multiple: true
+        }
 }
 
 def installed() {
@@ -275,19 +296,31 @@ def eventHandler(evt)
         if (evt.value.contains("Wind")) {
         	if (evt.value.contains("High"))
             {
-            	if (twchighhon!=null)
-        			twchighhon.on()
+            	if (twchighwon!=null)
+        			twchighwon.on()
                     
-                if (twchighhoff!=null)
-            		twchighhoff.off()
+                if (twchighwoff!=null)
+            		twchighwoff.off()
+                    
+                if (twchighwopen!=null)
+        			twchighwopen.open()
+                    
+                if (twchighwclose!=null)
+            		twchighwclose.close()     
             }
             else
             {
-                if (twclowhon!=null)
-        			twclowhon.on()
+                if (twclowwon!=null)
+        			twclowwon.on()
                     
-                if (twclowhoff!=null)
-	            	twclowhoff.off()            
+                if (twclowwoff!=null)
+	            	twclowwoff.off()  
+                    
+                if (twclowwopen!=null)
+        			twclowwopen.open()
+                    
+                if (twclowwclose!=null)
+	            	twclowwclose.close()       
             }
 		}        
     	options.method = 'push'
