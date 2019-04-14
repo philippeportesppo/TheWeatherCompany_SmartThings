@@ -153,7 +153,7 @@ preferences {
 
 def installed() {
 	log.debug "Installed with settings: ${settings}"
-	state.deviceId="12345678AFR"
+	state.deviceId="12345678AF"
     state.deviceName=""
     state.deviceRef= getAllChildDevices()?.find {
     it.device.deviceNetworkId == state.deviceId}
