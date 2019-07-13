@@ -26,7 +26,6 @@ definition(
 
 preferences {
 
-
         section("Alert Settings") {
             input "twcsnowalert", "bool", title: "Snow Alert"
             input "twcstormalert", "bool", title: "Storm Alert" 
@@ -34,69 +33,72 @@ preferences {
 			input "twctwcwtempalert", "number", title: "Low temperature Alert (C or F)", required: false
  			input "twctwcghtempalert", "number", title: "High temperature Alert (C or F)", required: false
 			input "twclowhumidityalert", "decimal", title: "Low humidity Alert (0-100)", required: false
-            input "twchighhumidityalert", "decimal", title: "High humidity Alert (0-100)", required: false            
+            input "twchighhumidityalert", "decimal", title: "High humidity Alert (0-100)", required: false
+            input "twclowwindalert", "decimal", title: "Low wind Alert (0-100)", required: false
+            input "twchighwindalert", "decimal", title: "High wind Alert (0-100)", required: false            
+
         }
         
         section("Switch On these on Snow Alert:")
         {
         	input "twcsnowon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Snow Alert:")
         {
         	input "twcsnowoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Rain Alert:")
         {
         	input "twcrainon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Rain Alert:")
         {
         	input "twcrainoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Storm Alert:")
         {
         	input "twcstormon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Storm Alert:")
         {
         	input "twcstormoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
 		section("Switch On these on Low Temperature Alert:")
         {
         	input "twclowton", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Low Temperature Alert:")
         {
         	input "twclowtoff", "capability.switch", required: false, multiple: true
         }
-  twc   	
+     	
         section("Switch On these on High Temperature Alert:")
         {
         	input "twchighton", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on High Temperature Alert:")
         {
         	input "twchightoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Low Humidity Alert:")
         {
         	input "twclowhon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Low Humidity Alert:")
         {
         	input "twclowhoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on High Humidity Alert:")
         {
         	input "twchighhon", "capability.switch", required: false, multiple: true
@@ -107,22 +109,74 @@ preferences {
         	input "twchighhoff", "capability.switch", required: false, multiple: true
         }
         
+        section("Switch On these on Low Wind Alert:")
+        {
+        	input "twclowwon", "capability.switch", required: false, multiple: true
+        }
+      
+        section("Switch Off these on Low Wind Alert:")
+        {
+        	input "twclowwoff", "capability.switch", required: false, multiple: true
+        }
+      
+        section("Switch On these on High Wind Alert:")
+        {
+        	input "twchigwhon", "capability.switch", required: false, multiple: true
+        }
+        
+        section("Switch Off these on High Wind Alert:")
+        {
+        	input "twchighwoff", "capability.switch", required: false, multiple: true
+        }
+        
+        section("Open these on Low Wind Alert:")
+        {
+        	input "twclowwopen", "capability.DoorControl", required: false, multiple: true
+        }
+        
+        section("Close these on Low Wind Alert:")
+        {
+        	input "twchighwclose", "capability.DoorControl", required: false, multiple: true
+        }
+        
+        
+        section("Open these on High Wind Alert:")
+        {
+        	input "twchigwopen", "capability.DoorControl", required: false, multiple: true
+        }
+        
+        section("Close these on High Wind Alert:")
+        {
+        	input "twchighwclose", "capability.DoorControl", required: false, multiple: true
+        }
 }
 
 def installed() {
 	log.debug "Installed with settings: ${settings}"
 	state.deviceId="12345678AF"
     state.deviceName=""
-    state.deviceRef= getAllChildDevices()?.find {
-    it.device.deviceNetworkId == state.deviceId}
-	log.debug "state.deviceRef installed with ${state.deviceRef}"
+    addDevices()
 }
 
 def updated() {
 	log.debug "Updated with settings: ${settings}"
 
-	unsubscribe() 
-    addDevices()
+	def Ref= getAllChildDevices()?.find {
+            it.device.deviceNetworkId == state.deviceId}
+	sendEvent( device:Ref, name:"updateSettings", value:[
+			"TWCsnowalert": twcsnowalert,
+            "TWCstormalert": twcstormalert,
+            "TWCrainalert": twcrainalert,
+            "TWClowtempalert": twclowtempalert,
+            "TWChightempalert": twchightempalert,
+            "TWClowhumidityalert": twclowhumidityalert,
+            "TWChighhumidityalert": twchighhumidityalert,
+            "TWClowwindalert": twclowwindalert,         
+            "TWChighwindalert": twchighwindalert], display:true)
+
+
+	//unsubscribe() 
+    //addDevices()
     //initialize()
 
 }
@@ -158,7 +212,7 @@ def addDevices() {
     }
     // and create it again with the new settings
     def mymap = getTwcLocation()
-    
+
     log.debug mymap
 
     def twccity = mymap['location']['city']
@@ -174,6 +228,8 @@ def addDevices() {
             "TWChightempalert": twchightempalert,
             "TWClowhumidityalert": twclowhumidityalert,
             "TWChighhumidityalert": twchighhumidityalert,
+            "TWClowwindalert": twclowwindalert,         
+            "TWChighwindalert": twchighwindalert,         
             /*completedSetup: true*/]
     ]), "Alert", eventHandler)                           
 }
@@ -243,6 +299,36 @@ def eventHandler(evt)
             }
 		}
         
+        if (evt.value.contains("Wind")) {
+        	if (evt.value.contains("High"))
+            {
+            	if (twchighwon!=null)
+        			twchighwon.on()
+                    
+                if (twchighwoff!=null)
+            		twchighwoff.off()
+                    
+                if (twchighwopen!=null)
+        			twchighwopen.open()
+                    
+                if (twchighwclose!=null)
+            		twchighwclose.close()     
+            }
+            else
+            {
+                if (twclowwon!=null)
+        			twclowwon.on()
+                    
+                if (twclowwoff!=null)
+	            	twclowwoff.off()  
+                    
+                if (twclowwopen!=null)
+        			twclowwopen.open()
+                    
+                if (twclowwclose!=null)
+	            	twclowwclose.close()       
+            }
+		}        
     	options.method = 'push'
         sendNotification(evt.value, options) 
 
