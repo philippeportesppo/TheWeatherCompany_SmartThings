@@ -31,8 +31,8 @@ preferences {
             input "twcsnowalert", "bool", title: "Snow Alert"
             input "twcstormalert", "bool", title: "Storm Alert" 
         	input "twctwcinalert", "bool", title: "Rain Alert"
-			input "twctwcwtempalert", "number", title: "Low temperature Alert (C or F)", required: false
- 			input "twctwcghtempalert", "number", title: "High temperature Alert (C or F)", required: false
+			input "twclowtempalert", "number", title: "Low temperature Alert (C or F)", required: false
+ 			input "twchightempalert", "number", title: "High temperature Alert (C or F)", required: false
 			input "twclowhumidityalert", "decimal", title: "Low humidity Alert (0-100)", required: false
             input "twchighhumidityalert", "decimal", title: "High humidity Alert (0-100)", required: false            
         }
