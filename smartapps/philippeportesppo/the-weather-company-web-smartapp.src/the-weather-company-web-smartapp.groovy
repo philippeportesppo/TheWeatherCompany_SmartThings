@@ -173,7 +173,7 @@ def addDevices() {
             "TWClowtempalert": twclowtempalert,
             "TWChightempalert": twchightempalert,
             "TWClowhumidityalert": twclowhumidityalert,
-            "TWChighhumidityalert": twchighhumidityalert,
+            "TWChighhumidityalert": twchighhumidityalert
             /*completedSetup: true*/]
     ]), "Alert", eventHandler)                           
 }
@@ -213,7 +213,7 @@ def eventHandler(evt)
                	if (twchighton!=null)
         			twchighton.on()
                     
-                if (twchighton!=null)
+                if (twchightoff!=null)
             		twchightoff.off()
             }
             else
