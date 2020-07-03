@@ -239,13 +239,13 @@ def refresh() {
     sendEvent(name: "temperature", value: mymap['temperature'], unit: temperatureScale)
     sendEvent(name: "TWC_Icon_UrlIcon", value: mymap['iconCode'])
     sendEvent(name: "TWC_main", value: mymap['iconCode'])
-    sendEvent(name: "weather", value: mymap['wxPhraseMedium'], display:true, isStateChange: true)
+    sendEvent(name: "weather", value: mymap['wxPhraseMedium'], displayed:true, isStateChange: true)
 
 
     if (getDataValue("TWCsnowalert")=="True" && mymap['wxPhraseMedium'].contains("Snow"))
     {
         // if ( state.snowalert == false) {
-            sendEvent(name:"Alert", value: "TWC Snow Alert!", display:true)
+            sendEvent(name:"Alert", value: "TWC Snow Alert!", displayed:true)
         //    state.snowalert=true  }
     }
     else
@@ -254,7 +254,7 @@ def refresh() {
     if (getDataValue("TWCrainalert")=="True" && (mymap['wxPhraseMedium'].contains("Rain") || mymap['wxPhraseMedium'].contains("Shower")))
     {
         // if ( state.rainalert == false) {
-            sendEvent(name:"Alert", value: "TWC Rain Alert!", display:true)
+            sendEvent(name:"Alert", value: "TWC Rain Alert!", displayed:true)
         //    state.rainalert=true  }
     }
     else
@@ -263,7 +263,7 @@ def refresh() {
     if (getDataValue("TWCstormalert")=="True" && mymapmymap['wxPhraseMedium'].contains("Storm"))
     {
         // if ( state.stormalert == false) {
-            sendEvent(name:"Alert", value: "TWC Storm Alert!", display:true)
+            sendEvent(name:"Alert", value: "TWC Storm Alert!", displayed:true)
         //    state.stormalert=true  }
     }
     else
@@ -274,7 +274,7 @@ def refresh() {
         {
 
             //if ( state.lowtempalert == false) {
-                sendEvent(name:"Alert", value: "TWC Low Temperature Alert!", display:true)
+                sendEvent(name:"Alert", value: "TWC Low Temperature Alert!", displayed:true)
             //    state.lowtempalert=true }
         }
         else
@@ -286,7 +286,7 @@ def refresh() {
         {
 
             //if ( state.hightempalert == false) {
-                sendEvent(name:"Alert", value: "TWC High Temperature Alert!", display:true)
+                sendEvent(name:"Alert", value: "TWC High Temperature Alert!", displayed:true)
             //    state.hightempalert=true }
         }
         else
@@ -299,7 +299,7 @@ def refresh() {
 
             //if ( state.lowhumidityalert == false) {
 
-                sendEvent(name:"Alert", value: "TWC Low Humidity Alert!", display:true)
+                sendEvent(name:"Alert", value: "TWC Low Humidity Alert!", displayed:true)
             //    state.lowhumidityalert=true }
         }
         else
@@ -314,7 +314,7 @@ def refresh() {
         if (getDataValue("TWChighhumidityalert").toFloat() <= mymap['relativeHumidity'].toFloat())
         {
             //if ( state.highhumidityalert == false) {
-                sendEvent(name:"Alert", value: "TWC High Humidity Alert!", display:true)
+                sendEvent(name:"Alert", value: "TWC High Humidity Alert!", displayed:true)
             //    state.highhumidityalert=true }
         }
         else
