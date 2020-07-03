@@ -41,62 +41,62 @@ preferences {
         {
         	input "twcsnowon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Snow Alert:")
         {
         	input "twcsnowoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Rain Alert:")
         {
         	input "twcrainon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Rain Alert:")
         {
         	input "twcrainoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Storm Alert:")
         {
         	input "twcstormon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Storm Alert:")
         {
         	input "twcstormoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
 		section("Switch On these on Low Temperature Alert:")
         {
         	input "twclowton", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Low Temperature Alert:")
         {
         	input "twclowtoff", "capability.switch", required: false, multiple: true
         }
-  twc   	
+     	
         section("Switch On these on High Temperature Alert:")
         {
         	input "twchighton", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on High Temperature Alert:")
         {
         	input "twchightoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on Low Humidity Alert:")
         {
         	input "twclowhon", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch Off these on Low Humidity Alert:")
         {
         	input "twclowhoff", "capability.switch", required: false, multiple: true
         }
-  twc    
+      
         section("Switch On these on High Humidity Alert:")
         {
         	input "twchighhon", "capability.switch", required: false, multiple: true
@@ -181,7 +181,9 @@ def addDevices() {
 def eventHandler(evt)
 {
 	Map options = [:]
-	log.debug "TWC evt: ${evt}"
+    log.debug "TWC evt.name: ${evt.name}"
+    log.debug "TWC evt.value: ${evt.value}"
+
 	if (evt.name == "Alert")
     {
     	if (evt.value.contains("Snow")) {
